@@ -17,14 +17,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        User existUser = getByUsername(user.getUsername());
-        if (existUser != null) throw new IllegalStateException("User already exist.");
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new IllegalStateException("User already exists.");
+        }
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new IllegalStateException("Email already exists.");
+        }
         return userRepository.save(user);
     }
 
     @Override
     public User getByUsername(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if (user == null) throw new ResourceNotFoundException("User with username=" + username
+                + " not found.");
+        return user;
     }
 
     @Override
