@@ -4,8 +4,6 @@ import by.morozmaksim.deepseekuserservice.domain.entity.User;
 import by.morozmaksim.deepseekuserservice.exception.ResourceNotFoundException;
 import by.morozmaksim.deepseekuserservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
 
 
@@ -62,7 +59,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = "users", key = "#id")
     public User getById(Long id) {
-        System.out.println("sd");
         return findById(id);
     }
 
