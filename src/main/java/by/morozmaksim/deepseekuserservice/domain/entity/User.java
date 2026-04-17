@@ -1,4 +1,4 @@
-package by.morozmaksim.deepseekuserservice.domain;
+package by.morozmaksim.deepseekuserservice.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

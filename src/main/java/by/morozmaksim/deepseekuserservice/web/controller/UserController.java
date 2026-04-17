@@ -1,7 +1,10 @@
 package by.morozmaksim.deepseekuserservice.web.controller;
 
-import by.morozmaksim.deepseekuserservice.domain.User;
+import by.morozmaksim.deepseekuserservice.domain.entity.User;
 import by.morozmaksim.deepseekuserservice.service.UserService;
+import by.morozmaksim.deepseekuserservice.web.dto.RequestUserDto;
+import by.morozmaksim.deepseekuserservice.web.dto.ResponseUserDto;
+import by.morozmaksim.deepseekuserservice.web.mapper.UserMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,31 +19,41 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+    public ResponseEntity<ResponseUserDto> create(@Valid @RequestBody RequestUserDto requestUserDto) {
+        User user = userMapper.requestUserDtoToUser(requestUserDto);
         User created = userService.create(user);
+        ResponseUserDto responseUserDto = userMapper.userToResponseUserDto(user);
         URI location = URI.create("users/" + created.getId());
-        return ResponseEntity.created(location).body(created);
+        return ResponseEntity.created(location).body(responseUserDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseUserDto update(@PathVariable Long id, @RequestBody RequestUserDto requestUserDto){
+        User user = userMapper.requestUserDtoToUser(requestUserDto);
+        User updated = userService.update(id, user);
+        return userMapper.userToResponseUserDto(updated);
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return userService.getById(id);
+    public ResponseUserDto getById(@PathVariable Long id) {
+        return userMapper.userToResponseUserDto(userService.getById(id));
     }
 
     @GetMapping("/username")
-    public User getByUsername(@RequestParam String username) {
-        return userService.getByUsername(username);
+    public ResponseUserDto getByUsername(@RequestParam String username) {
+        return userMapper.userToResponseUserDto(userService.getByUsername(username));
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
+    public List<ResponseUserDto> getAll() {
+        return userMapper.usersToResponseUserDto(userService.getAll());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
