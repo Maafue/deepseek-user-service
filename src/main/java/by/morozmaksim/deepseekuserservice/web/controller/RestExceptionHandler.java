@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -27,7 +28,7 @@ public class RestExceptionHandler {
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed.");
 
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         for (FieldError error : errors) {
             map.put(error.getField(), error.getDefaultMessage());
