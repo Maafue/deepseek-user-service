@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     public User update(Long id, User user) {
         User existUser = findById(id);
         if (user.getEmail() != null ) existUser.setEmail(user.getEmail());
+
         if (user.getUsername() != null) existUser.setUsername(user.getUsername());
         return userRepository.save(existUser);
     }
